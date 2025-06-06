@@ -1,0 +1,14 @@
+# Compiled Java class files
+*.class
+
+# Simulation output files (re-generated each run)
+*.txt
+output/
+
+# Log and swap files
+*.log
+*.swp
+
+# IDE/project-specific settings (optional)
+.vscode/
+.idea/
