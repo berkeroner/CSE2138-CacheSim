@@ -2,8 +2,8 @@
 import java.io.*;
 
 public class TraceParser {
-    private Cache l1D, l1I, l2;
-    private Memory ram;
+    private final Cache l1D, l1I, l2;
+    private final Memory ram;
 
     public TraceParser(Cache l1D, Cache l1I, Cache l2, Memory ram) {
         this.l1D = l1D;

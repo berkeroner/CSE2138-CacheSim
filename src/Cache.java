@@ -9,16 +9,16 @@ class CacheLine {
 
     public CacheLine(long tag, long time, boolean valid, String data) {
         this.tag = tag;
-        this.time = time;
+        this.time = time+1;
         this.valid = valid;
         this.data = data;
     }
 }
 
 public class Cache {
-    private int s, E, b;
-    private int S;
-    private String name;
+    private final int s, E, b;
+    private final int S;
+    private final String name;
     private long timeCounter = 0;
 
     private Map<Integer, CacheSet> sets;

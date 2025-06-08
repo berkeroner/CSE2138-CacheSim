@@ -3,7 +3,7 @@ import java.io.*;
 import java.util.*;
 
 public class Memory {
-    private Map<Long, String> memory;
+    private final Map<Long, String> memory;
 
     public Memory(String filename) throws IOException {
         memory = new HashMap<>();
@@ -44,7 +44,7 @@ public class Memory {
                 int setIndex = entry.getKey();
                 for (CacheLine line : entry.getValue().getLines()) {
                     if (line.valid) {
-                        pw.printf("Set %d: Tag=%x Time=%d Valid=%b Data=%s\n",
+                        pw.printf("Set %d: Tag=%07x Time=%d Valid=%b Data=%s\n",
                                 setIndex, line.tag, line.time, line.valid, line.data);
                     }
                 }
