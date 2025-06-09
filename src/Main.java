@@ -1,9 +1,18 @@
 
-import java.util.*;
+// CSE2138 Systems Programming - Project 3
+// Cache Simulator
+
+/* Authors:
+    Berker ÖNER 150122018
+    Miray PİYADE 150122026
+    Dilek İrem ÇILDIR 150123075
+*/
+
 import java.io.*;
+import java.util.*;
 
 
-//Cache class
+// Contains data to be held in each row
 class CacheLine {
     long tag;
     long time;
@@ -18,6 +27,7 @@ class CacheLine {
     }
 }
 
+// Represents the L1 or L2 cache structure
 class Cache {
     private final int s, E, b;
     private final int S;
@@ -42,6 +52,7 @@ class Cache {
         }
     }
 
+    // Cache access for read or write operation
     public void access(long address, int size, boolean isStore, boolean isModify, Cache l2, Memory ram) {
         long tag = address >> (s + b);
         int setIndex = (int)((address >> b) & ((1 << s) - 1));
@@ -76,6 +87,7 @@ class Cache {
             l2.access(address, size, false, false, null, ram);
         }
 
+        // Fetch data from memory
         String data = ram.read(address, size);
         CacheLine newline = new CacheLine(tag, timeCounter++, true, data);
 
@@ -91,6 +103,7 @@ class Cache {
         }
     }
 
+    // Update cache content with data from L2
     public void updateData(long address, int size, Memory ram) {
         long tag = address >> (s + b);
         int setIndex = (int)((address >> b) & ((1 << s) - 1));
@@ -106,7 +119,7 @@ class Cache {
     }
 }
 
-//CacheSet class
+// Contains cache lines in each set
 class CacheSet {
     LinkedList<CacheLine> lines;
     int E;
@@ -116,6 +129,7 @@ class CacheSet {
         this.lines = new LinkedList<>();
     }
 
+    // Find a cache line by tag
     public CacheLine findLine(long tag) {
         for (CacheLine line : lines) {
             if (line.valid && line.tag == tag) return line;
@@ -123,6 +137,7 @@ class CacheSet {
         return null;
     }
 
+    // Insert a new line
     public void insertLine(CacheLine newline) {
         if (lines.size() >= E) {
             lines.removeFirst();
@@ -137,7 +152,7 @@ class CacheSet {
 
 }
 
-// Memory class
+// Read or write RAM.dat contents
 class Memory {
     private final Map<Long, String> memory;
 
@@ -174,6 +189,7 @@ class Memory {
         return sb.toString();
     }
 
+    // Write results to txt file
     public static void writeCacheToFile(String filename, Map<Integer, CacheSet> sets) throws IOException {
         try (PrintWriter pw = new PrintWriter(filename)) {
             for (Map.Entry<Integer, CacheSet> entry : sets.entrySet()) {
@@ -189,7 +205,7 @@ class Memory {
     }
 }
 
-//TraceParser class
+// Read trace file line by line and execute operations
 class TraceParser {
     private final Cache l1D, l1I, l2;
     private final Memory ram;
@@ -201,6 +217,7 @@ class TraceParser {
         this.ram = ram;
     }
 
+    // Parse trace file
     public void parse(String traceFile) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(traceFile))) {
             String line;
@@ -256,8 +273,7 @@ class TraceParser {
     }
 }
 
-
-
+// Main class
 public class Main {
     public static void main(String[] args) throws IOException {
         int l1s = 0, l1e = 2, l1b = 3;
